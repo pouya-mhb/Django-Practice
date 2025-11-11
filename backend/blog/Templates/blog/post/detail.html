@@ -47,5 +47,17 @@
         </form>
         {% endif %}
     </div>
+    <div class="col-lg-8">
+        <h3>Similar Posts</h3>
+        {% for similar_post in similar_posts %}
+        <h4>
+            <a href="{{ similar_post.get_absolute_url }}" class="text-decoration-none text-blue">
+                {{ similar_post.title }}
+            </a>
+        </h4>
+        {% empty %}
+        <p>No similar posts found.</p>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
