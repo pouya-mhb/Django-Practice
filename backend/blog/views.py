@@ -5,20 +5,30 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView, DetailView
 from django.shortcuts import get_object_or_404, render
 from django.core.mail import send_mail
+from taggit.models import Tag
 
-# def post_list(request):
-#     posts = Post.published.all()
-#     paginator = Paginator(posts, 10)
-#     page_number = request.GET.get("page")
-#     try:
-#         posts = paginator.page(page_number)
-#     except PageNotAnInteger:
-#         # If page is not an integer deliver the first page
-#         posts = paginator.page(1)
-#     except EmptyPage:
-#         # If page is out of range deliver last page of results
-#         posts = paginator.page(paginator.num_pages)
-#     return render(request, "blog/post/list.html", {"page": page_number, "posts": posts})
+
+def post_list(request, tag_slug=None):
+    posts = Post.published.all()
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get("page")
+    tag = None
+    try:
+        if tag_slug:
+            tag = get_object_or_404(Tag, slug=tag_slug)
+            posts = posts.filter(tags__in=[tag])
+        posts = paginator.page(page_number)
+    except PageNotAnInteger:
+        # If page is not an integer deliver the first page
+        posts = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range deliver last page of results
+        posts = paginator.page(paginator.num_pages)
+    return render(
+        request,
+        "blog/post/list.html",
+        {"page": page_number, "posts": posts, "tag": tag},
+    )
 
 
 def post_detail(request, year, month, day, post):
@@ -67,12 +77,12 @@ def month_archive(request, year, month):
     )
 
 
-class PostListView(ListView):
-    model = Post
-    paginate_by = 10
-    queryset = Post.published.all()
-    context_object_name = "posts"
-    template_name = "blog/post/list.html"
+# class PostListView(ListView):
+#     model = Post
+#     paginate_by = 10
+#     queryset = Post.published.all()
+#     context_object_name = "posts"
+#     template_name = "blog/post/list.html"
 
 
 # class PostDetail(DetailView):
