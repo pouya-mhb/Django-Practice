@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Post
-from .forms import EmailPostForm
+from .forms import CommentForm, EmailPostForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView, DetailView
 from django.shortcuts import get_object_or_404, render
@@ -21,11 +21,34 @@ from django.core.mail import send_mail
 #     return render(request, "blog/post/list.html", {"page": page_number, "posts": posts})
 
 
-# def post_detail(request, year, month, day, post):
-#     post = Post.objects.get(
-#         slug=post, publish__year=year, publish__month=month, publish__day=day
-#     )
-#     return render(request, "blog/post/detail.html", {"post": post})
+def post_detail(request, year, month, day, post):
+    post = Post.objects.get(
+        slug=post, publish__year=year, publish__month=month, publish__day=day
+    )
+
+    comments = post.comments.filter(active=True)
+
+    new_comment = None
+
+    if request.method == "POST":
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.post = post
+            new_comment.save()
+    else:
+        comment_form = CommentForm()
+
+    return render(
+        request,
+        "blog/post/detail.html",
+        {
+            "post": post,
+            "comments": comments,
+            "new_comment": new_comment,
+            "comment_form": comment_form,
+        },
+    )
 
 
 def year_archive(request, year):
@@ -52,25 +75,51 @@ class PostListView(ListView):
     template_name = "blog/post/list.html"
 
 
-class PostDetail(DetailView):
-    model = Post
-    context_object_name = "post"
-    template_name = "blog/post/detail.html"
+# class PostDetail(DetailView):
+#     model = Post
+#     context_object_name = "post"
+#     template_name = "blog/post/detail.html"
 
-    def get_queryset(self):
-        return Post.published.all()
+#     def get_queryset(self):
+#         return Post.published.all()
 
-    def get_object(self, queryset=None):
-        return (
-            self.get_queryset()
-            .filter(
-                slug=self.kwargs.get("slug"),
-                publish__year=self.kwargs.get("year"),
-                publish__month=self.kwargs.get("month"),
-                publish__day=self.kwargs.get("day"),
-            )
-            .first()
-        )
+#     def get_object(self, queryset=None):
+#         return (
+#             self.get_queryset()
+#             .filter(
+#                 slug=self.kwargs.get("slug"),
+#                 publish__year=self.kwargs.get("year"),
+#                 publish__month=self.kwargs.get("month"),
+#                 publish__day=self.kwargs.get("day"),
+#             )
+#             .first()
+#         )
+
+#     def show_comments(self, request):
+#         post = self.get_object()
+#         comments = post.comments.filter(active=True)
+
+#         new_comment = None
+
+#         if self.request.method == "POST":
+#             comment_form = CommentForm(data=self.request.POST)
+#             if comment_form.is_valid():
+#                 new_comment = comment_form.save(commit=False)
+#                 new_comment.post = post
+#                 new_comment.save()
+#         else:
+#             comment_form = CommentForm()
+
+#         return render(
+#             request,
+#             "blog/post/detail.html",
+#             {
+#                 "post": post,
+#                 "comments": comments,
+#                 "new_comment": new_comment,
+#                 "comment_form": comment_form,
+#             },
+#         )
 
 
 def post_share(request, post_id):
