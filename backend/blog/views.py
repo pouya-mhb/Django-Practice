@@ -1,21 +1,22 @@
 from django.shortcuts import render
 from .models import Post
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.generic import ListView
 
 
-def post_list(request):
-    posts = Post.published.all()
-    paginator = Paginator(posts, 10)
-    page_number = request.GET.get("page")
-    try:
-        posts = paginator.page(page_number)
-    except PageNotAnInteger:
-        # If page is not an integer deliver the first page
-        posts = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range deliver last page of results
-        posts = paginator.page(paginator.num_pages)
-    return render(request, "blog/post/list.html", {"page": page_number, "posts": posts})
+# def post_list(request):
+#     posts = Post.published.all()
+#     paginator = Paginator(posts, 10)
+#     page_number = request.GET.get("page")
+#     try:
+#         posts = paginator.page(page_number)
+#     except PageNotAnInteger:
+#         # If page is not an integer deliver the first page
+#         posts = paginator.page(1)
+#     except EmptyPage:
+#         # If page is out of range deliver last page of results
+#         posts = paginator.page(paginator.num_pages)
+#     return render(request, "blog/post/list.html", {"page": page_number, "posts": posts})
 
 
 def post_detail(request, year, month, day, post):
@@ -39,3 +40,11 @@ def month_archive(request, year, month):
         "blog/post/month_archive.html",
         {"posts": posts, "year": year, "month": month},
     )
+
+
+class PostListView(ListView):
+    model = Post
+    paginate_by = 10
+    queryset = Post.published.all()
+    context_object_name = "posts"
+    template_name = "blog/post/list.html"
