@@ -19,6 +19,10 @@
         <a href="{% url 'blog:post_list' %}" class="btn btn-outline-secondary btn-sm">
             ← Back to all posts
         </a>
+        <a href="{% url 'blog:post_share' post.id %}" class="btn btn-outline-primary btn-sm">
+            📤 Share this post
+        </a>
+
     </div>
 </div>
 {% endblock %}
