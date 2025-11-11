@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Post
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 
 # def post_list(request):
@@ -48,3 +48,24 @@ class PostListView(ListView):
     queryset = Post.published.all()
     context_object_name = "posts"
     template_name = "blog/post/list.html"
+
+
+class PostDetail(DetailView):
+    model = Post
+    context_object_name = "post"
+    template_name = "blog/post/detail.html"
+
+    def get_queryset(self):
+        return Post.published.all()
+
+    def get_object(self, queryset=None):
+        return (
+            self.get_queryset()
+            .filter(
+                slug=self.kwargs.get("slug"),
+                publish__year=self.kwargs.get("year"),
+                publish__month=self.kwargs.get("month"),
+                publish__day=self.kwargs.get("day"),
+            )
+            .first()
+        )
