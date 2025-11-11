@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="text-center">
+        <h1 class="mb-4">Welcome to My Blog</h1>
+        {% if user.is_authenticated %}
+        <p class="lead">Hello, <strong>{{ user.username }}</strong> 👋</p>
+        <a href="{% url 'blog:post_list' %}" class="btn btn-primary btn-lg me-2">
+            View Blog Posts
+        </a>
+        <a href="{% url 'core:logout' %}" class="btn btn-outline-danger btn-lg">
+            Logout
+        </a>
+        {% else %}
+        <p class="lead">Join us and explore exciting blog posts!</p>
+        <a href="{% url 'core:register' %}" class="btn btn-success btn-lg me-2">
+            Register
+        </a>
+        <a href="{% url 'core:login' %}" class="btn btn-outline-primary btn-lg">
+            Login
+        </a>
+        {% endif %}
+    </div>
+
+    <hr class="my-5">
+
+    <div class="row text-center">
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title">📝 Blog</h5>
+                    <p class="card-text">Read the latest posts and articles from our authors.</p>
+                    <a href="{% url 'blog:post_list' %}" class="btn btn-outline-primary">Go to Blog</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title">👤 Account</h5>
+                    {% if user.is_authenticated %}
+                    <p class="card-text">Manage your account settings or logout.</p>
+                    <a href="{% url 'core:logout' %}" class="btn btn-outline-danger">Logout</a>
+                    {% else %}
+                    <p class="card-text">Login or register to access your personalized dashboard.</p>
+                    <a href="{% url 'core:login' %}" class="btn btn-outline-primary">Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title">💡 About</h5>
+                    <p class="card-text">Learn more about what this blog is and who’s behind it.</p>
+                    <a href="#" class="btn btn-outline-secondary">Read More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
