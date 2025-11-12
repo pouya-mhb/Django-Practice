@@ -102,3 +102,21 @@ def order_detail(request, order_id):
         "total_price": total_price,
     }
     return render(request, "shop/order_detail.html", context)
+
+
+def payment(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+
+    if request.method == "POST":
+        if "success" in request.POST:
+            order.paid = True
+            order.save()
+            messages.success(request, f"Payment successful for Order #{order.id}")
+            return redirect("dashboard")
+        elif "fail" in request.POST:
+            order.paid = False
+            order.save()
+            messages.error(request, f"Payment failed for Order #{order.id}")
+            return redirect("dashboard")
+
+    return render(request, "shop/payment.html", {"order": order})

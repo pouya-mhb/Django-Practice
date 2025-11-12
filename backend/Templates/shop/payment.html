@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Payment - Order #{{ order.id }}{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h2>Order #{{ order.id }}</h2>
+    <p class="lead">Total: ${{ order.get_total_price }}</p>
+    <p>Status:
+        {% if order.paid %}
+        <span class="badge bg-success">Paid</span>
+        {% else %}
+        <span class="badge bg-warning text-dark">Pending</span>
+        {% endif %}
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" name="success" class="btn btn-success btn-lg me-3">
+            ✅ Successful Payment
+        </button>
+        <button type="submit" name="fail" class="btn btn-danger btn-lg">
+            ❌ Unsuccessful Payment
+        </button>
+    </form>
+</div>
+{% endblock %}

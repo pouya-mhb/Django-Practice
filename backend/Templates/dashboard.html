@@ -56,6 +56,7 @@
                     <span class="badge bg-success">Paid</span>
                     {% else %}
                     <span class="badge bg-warning text-dark">Pending</span>
+                    <a href="{% url 'shop:payment' order.id %}">Payment</a>
                     {% endif %}
                 </td>
                 <td>${{ order.get_total_price }}</td>
