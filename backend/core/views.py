@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from blog.models import Post, Comment
 from .models import UserProfile
+from shop.models import Order, OrderItem
 
 
 def home(request):
@@ -14,6 +15,9 @@ def home(request):
 
 @login_required
 def dashboard(request):
+    orders = Order.objects.filter(user=request.user).order_by(
+        "-created"
+    )  # latest first
     user_posts = Post.objects.filter(author=request.user)
     user_comments = Comment.objects.filter(user=request.user)
     profile = UserProfile.objects.get(user=request.user)
@@ -26,6 +30,7 @@ def dashboard(request):
             "posts": user_posts,
             "comments": user_comments,
             "avatar": avatar,
+            "orders": orders,
         },
     )
 

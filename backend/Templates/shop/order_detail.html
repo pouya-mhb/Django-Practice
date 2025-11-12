@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Order #{{ order.id }} Details{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Order #{{ order.id }}</h2>
+
+    <div class="card mb-4">
+        <div class="card-header bg-dark text-white">
+            Order Summary
+        </div>
+        <div class="card-body">
+            <p><strong>Order Date:</strong> {{ order.created|date:"M d, Y H:i" }}</p>
+            <p><strong>Status:</strong>
+                {% if order.paid %}
+                <span class="badge bg-success">Paid</span>
+                {% else %}
+                <span class="badge bg-warning text-dark">Pending</span>
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    <h4>Items</h4>
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Product</th>
+                <th>Unit Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>${{ item.price }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ item.get_total_price }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="text-end mt-3">
+        <h5><strong>Total: ${{ total_price }}</strong></h5>
+    </div>
+
+    <div class="mt-4">
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+        <a href="{% url 'shop:product_list' %}" class="btn btn-primary">Continue Shopping</a>
+    </div>
+</div>
+{% endblock %}

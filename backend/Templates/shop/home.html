@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Shop Home{% endblock %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h1>Welcome to Our Shop 🛍️</h1>
+    <p class="lead">Browse the latest products and find what you love!</p>
+
+    <a href="{% url 'shop:product_list' %}" class="btn btn-primary mt-3">
+        View Products
+    </a>
+</div>
+{% endblock %}

@@ -30,26 +30,17 @@
                         <a class="nav-link {% if 'blog' in request.resolver_match.namespace %}active{% endif %}"
                             href="{% url 'blog:post_list' %}">Blog</a>
                     </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle {% if 'shop' in request.resolver_match.namespace %}active{% endif %}"
-                            href="#" id="shopDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'shop' in request.resolver_match.namespace %}active{% endif %}"
+                            href="{% url 'shop:home' %}">
                             Shop
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="shopDropdown">
-                            <li><a class="dropdown-item" href="{% url 'shop:product_list' %}">All Products</a></li>
-                            {% comment %}
-                            If you have categories passed globally (via context processor), you can list them here
-                            dynamically:
-                            {% for category in categories %}
-                            <li><a class="dropdown-item"
-                                    href="{% url 'shop:product_list' %}?category={{ category.slug }}">{{ category.name
-                                    }}</a></li>
-                            {% endfor %}
-                            {% endcomment %}
-                        </ul>
                     </li>
-
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'shop:cart_detail' %}">
+                            🛒 Cart
+                        </a>
+                    </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"
