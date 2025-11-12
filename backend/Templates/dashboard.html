@@ -5,7 +5,12 @@
     <hr>
     <div>
         <h4>Account Settings</h4>
-        <a href="{% url 'core:password_change' %}">Change your password</a>
+        <p>
+            <a href="{% url 'core:password_change' %}">Change your password</a>
+        </p>
+        <p>
+            <a href="{% url 'core:password_reset' %}">Forgotten your password?</a>
+        </p>
         <hr>
     </div>
     <h3>Posts and Comments</h3>
