@@ -1,17 +1,49 @@
 from django.shortcuts import render
-from .models import Post
-from .forms import CommentForm, EmailPostForm
+from .models import Post, Comment
+from .forms import CommentForm, EmailPostForm, PostCreateForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView, DetailView
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.core.mail import send_mail
 from taggit.models import Tag
 from django.db.models import Count
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.utils.text import slugify
+
+
+@login_required
+def post_create(request):
+    if request.method == "POST":
+        form = PostCreateForm(request.POST)
+        if form.is_valid():
+            new_post = form.save(commit=False)
+            new_post.author = request.user
+            if not new_post.slug:
+                new_post.slug = slugify(new_post.title)
+            new_post.status = "published"
+            new_post.save()
+            messages.success(request, "Post created successfully!")
+            return redirect("blog:dashboard")
+    else:
+        form = PostCreateForm()
+    return render(request, "blog/post/create.html", {"form": form})
+
+
+@login_required
+def dashboard(request):
+    user_posts = Post.objects.filter(author=request.user)
+    user_comments = Comment.objects.filter(user=request.user)
+    return render(
+        request,
+        "blog/dashboard.html",
+        {"posts": user_posts, "comments": user_comments},
+    )
 
 
 def post_list(request, tag_slug=None):
     posts = Post.published.all()
-    paginator = Paginator(posts, 10)
+    paginator = Paginator(posts, 5)
     page_number = request.GET.get("page")
     tag = None
     try:
@@ -46,6 +78,9 @@ def post_detail(request, year, month, day, post):
         if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
             new_comment.post = post
+            new_comment.user = request.user
+            new_comment.name = request.user.username
+            new_comment.email = request.user.email
             new_comment.save()
     else:
         comment_form = CommentForm()
