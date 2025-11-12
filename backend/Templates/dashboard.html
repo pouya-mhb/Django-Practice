@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container mt-5">
-    <h2>Your Dashboard, {{ user.username }}</h2>
+    <div>
+        <h2>
+            <img src="{{ avatar.url }}" alt="Avatar" class="rounded-circle" width="200" height="200">
+            Your Dashboard, {{ user.username }}
+        </h2>
+    </div>
     <hr>
     <div>
         <h4>Account Settings</h4>

@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from blog.models import Post, Comment
+from .models import UserProfile
 
 
 def home(request):
@@ -15,10 +16,16 @@ def home(request):
 def dashboard(request):
     user_posts = Post.objects.filter(author=request.user)
     user_comments = Comment.objects.filter(user=request.user)
+    profile = UserProfile.objects.get(user=request.user)
+    avatar = profile.avatar
     return render(
         request,
         "dashboard.html",
-        {"posts": user_posts, "comments": user_comments},
+        {
+            "posts": user_posts,
+            "comments": user_comments,
+            "avatar": avatar,
+        },
     )
 
 
