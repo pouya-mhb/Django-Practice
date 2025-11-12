@@ -42,7 +42,12 @@
         {% for comment in post.comments.all %}
         <article class="card shadow-sm mb-4">
             <div class="card-body">
-                <p><strong>{{ comment.name }}</strong> says:</p>
+                <h4>
+                    <strong>
+                        {{ comment.title }}
+                    </strong>
+                </h4>
+                <p><strong>{{ comment.user }}</strong> says:</p>
                 <p>{{ comment.body|linebreaks }}</p>
                 <p class="text-muted">{{ comment.created|date:"F d, Y H:i" }}</p>
             </div>
