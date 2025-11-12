@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import LoginForm, RegisterForm
+from .forms import LoginForm, RegisterForm, ProfileEditForm
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -22,11 +22,31 @@ def dashboard(request):
         request,
         "dashboard.html",
         {
+            "profile": profile,
             "posts": user_posts,
             "comments": user_comments,
             "avatar": avatar,
         },
     )
+
+
+@login_required
+def edit_profile(request):
+    user = request.user
+    profile = UserProfile.objects.get(user=user)
+
+    if request.method == "POST":
+        form = ProfileEditForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Your profile has been updated successfully!")
+            return redirect("dashboard")
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = ProfileEditForm(instance=profile)
+
+    return render(request, "core/edit_profile.html", {"form": form})
 
 
 def user_register(request):

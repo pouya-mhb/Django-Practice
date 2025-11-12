@@ -8,10 +8,10 @@
             {% if avatar %}
             <img src="{{ avatar.url }}" alt="Avatar" class="img-thumbnail mb-3" width="120">
             {% endif %}
-            <p><strong>Email:</strong> {{ request.user.email }}</p>
-            <p><strong>Location:</strong> {{ profile.location|default:"Not set" }}</p>
+            <p><strong>Email:</strong> {{ profile.user.email }}</p>
+            <p><strong>Website:</strong> {{ profile.website }}</p>
             <p><strong>Bio:</strong> {{ profile.bio|default:"No bio yet." }}</p>
-            <a href="#" class="btn btn-outline-primary btn-sm">Edit Profile</a>
+            <a href="{% url 'core:edit_profile' %}" class="btn btn-outline-primary btn-sm">Edit Profile</a>
         </div>
     </div>
     <hr>
