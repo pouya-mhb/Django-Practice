@@ -45,4 +45,4 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     messages.success(request, "Logout successful")
-    return redirect("home")
+    return render(request, "core/logout.html")
