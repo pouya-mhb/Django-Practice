@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "core",
     "social",
     "blog",
+    "shop",
     "taggit",
 ]
 
