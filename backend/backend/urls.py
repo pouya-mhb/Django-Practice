@@ -28,6 +28,7 @@ urlpatterns = [
     path("core/", include("core.urls")),
     path("blog/", include("blog.urls")),
     path("social/", include("social.urls")),
+    path("shop/", include("shop.urls", namespace="shop")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
