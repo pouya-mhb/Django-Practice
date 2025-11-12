@@ -49,7 +49,9 @@ def user_login(request):
             else:
                 return HttpResponse("Account disabled")
         else:
-            return HttpResponse("Invalid login")
+            messages.warning(request, "Invalid Login")
+            return redirect("core:login")
+
     else:
         form = LoginForm()
         return render(request, "core/login.html", {"form": form})
