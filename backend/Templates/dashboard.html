@@ -1,21 +1,35 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container mt-5">
-    <div>
-        <h2>
-            <img src="{{ avatar.url }}" alt="Avatar" class="rounded-circle" width="200" height="200">
-            Your Dashboard, {{ user.username }}
-        </h2>
+    <h2 class="mb-4">Welcome, {{ request.user.username }}!</h2>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">Profile Information</h5>
+            {% if avatar %}
+            <img src="{{ avatar.url }}" alt="Avatar" class="img-thumbnail mb-3" width="120">
+            {% endif %}
+            <p><strong>Email:</strong> {{ request.user.email }}</p>
+            <p><strong>Location:</strong> {{ profile.location|default:"Not set" }}</p>
+            <p><strong>Bio:</strong> {{ profile.bio|default:"No bio yet." }}</p>
+            <a href="#" class="btn btn-outline-primary btn-sm">Edit Profile</a>
+        </div>
     </div>
     <hr>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h4 class="card-title">Account Settings</h4>
+            <p>
+                <a href="{% url 'core:password_change' %}">Change your password</a>
+            </p>
+            <p>
+                <a href="{% url 'core:password_reset' %}">Forgotten your password?</a>
+            </p>
+        </div>
+    </div>
+</div>
+<div class="container mt-5">
     <div>
-        <h4>Account Settings</h4>
-        <p>
-            <a href="{% url 'core:password_change' %}">Change your password</a>
-        </p>
-        <p>
-            <a href="{% url 'core:password_reset' %}">Forgotten your password?</a>
-        </p>
+
         <hr>
     </div>
     <h3>Posts and Comments</h3>
