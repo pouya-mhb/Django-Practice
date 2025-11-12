@@ -33,9 +33,17 @@ def user_register(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save(commit=False)
+            user.email = form.cleaned_data["email"]
+            user.save()
+
+            UserProfile.objects.create(user=user)
+
             messages.success(request, "Registration successful")
             return redirect("core:login")
+        else:
+            print(form.errors)
+            messages.error(request, "Please correct the errors below.")
     else:
         form = RegisterForm()
     return render(request, "core/register.html", {"form": form})
