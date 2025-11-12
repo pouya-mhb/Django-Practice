@@ -1,5 +1,18 @@
 from django import forms
-from .models import Comment
+from .models import Comment, Post
+
+
+class PostCreateForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ("title", "body", "tags")
+        widgets = {
+            "title": forms.TextInput(attrs={"placeholder": "Enter the title"}),
+            "body": forms.Textarea(attrs={"placeholder": "Write your post here"}),
+            "tags": forms.TextInput(
+                attrs={"placeholder": "Add tags separated by commas"}
+            ),
+        }
 
 
 class EmailPostForm(forms.Form):
