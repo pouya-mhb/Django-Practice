@@ -13,6 +13,25 @@ def home(request):
     return render(request, "home.html")
 
 
+def about(request):
+    return render(request, "about.html")
+
+
+def contact(request):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        message = request.POST.get("message")
+
+        # todo: email or save to database here
+        messages.success(
+            request, "Thanks for reaching out! We’ll get back to you soon."
+        )
+        return redirect("core:contact")
+
+    return render(request, "contact.html")
+
+
 @login_required
 def dashboard(request):
     orders = Order.objects.filter(user=request.user).order_by(

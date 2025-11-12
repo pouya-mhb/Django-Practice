@@ -31,6 +31,11 @@
                             href="{% url 'blog:post_list' %}">Blog</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="">
+                            Social
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link {% if 'shop' in request.resolver_match.namespace %}active{% endif %}"
                             href="{% url 'shop:home' %}">
                             Shop
@@ -41,6 +46,9 @@
                             🛒 Cart
                         </a>
                     </li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
+
                     {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"

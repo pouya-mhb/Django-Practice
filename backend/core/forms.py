@@ -22,3 +22,7 @@ class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ["bio", "website", "avatar"]
+
+
+class ContactForms(forms.ModelForm):
+    pass
