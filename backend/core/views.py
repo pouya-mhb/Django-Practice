@@ -3,10 +3,23 @@ from .forms import LoginForm, RegisterForm
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from blog.models import Post, Comment
 
 
 def home(request):
     return render(request, "home.html")
+
+
+@login_required
+def dashboard(request):
+    user_posts = Post.objects.filter(author=request.user)
+    user_comments = Comment.objects.filter(user=request.user)
+    return render(
+        request,
+        "dashboard.html",
+        {"posts": user_posts, "comments": user_comments},
+    )
 
 
 def user_register(request):
@@ -32,7 +45,7 @@ def user_login(request):
             if user.is_active:
                 login(request, user)
                 messages.success(request, "Login successful")
-                return redirect("home")
+                return redirect("dashboard")
             else:
                 return HttpResponse("Account disabled")
         else:

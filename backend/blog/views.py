@@ -30,17 +30,6 @@ def post_create(request):
     return render(request, "blog/post/create.html", {"form": form})
 
 
-@login_required
-def dashboard(request):
-    user_posts = Post.objects.filter(author=request.user)
-    user_comments = Comment.objects.filter(user=request.user)
-    return render(
-        request,
-        "blog/dashboard.html",
-        {"posts": user_posts, "comments": user_comments},
-    )
-
-
 def post_list(request, tag_slug=None):
     posts = Post.published.all()
     paginator = Paginator(posts, 5)
