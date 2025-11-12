@@ -24,7 +24,7 @@ def post_create(request):
             new_post.status = "published"
             new_post.save()
             messages.success(request, "Post created successfully!")
-            return redirect("blog:dashboard")
+            return redirect("dashboard")
     else:
         form = PostCreateForm()
     return render(request, "blog/post/create.html", {"form": form})
