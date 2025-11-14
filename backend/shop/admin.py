@@ -15,5 +15,13 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ("category",)
 
 
-admin.site.register(Order)
-admin.site.register(OrderItem)
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ("id", "user", "created", "paid")
+    list_filter = ("created", "paid")
+
+
+@admin.register(OrderItem)
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ("order", "product", "quantity", "price")
+    list_filter = ("order", "product")
